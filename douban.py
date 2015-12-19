@@ -7,13 +7,14 @@ import json
 #import urllib.request
 import pymysql
 import time
+import password
 
 #连接数据库
 config = {
 	'host':'localhost',
 	'port':3306,
-	'user':password.dbUsr,
-	'password':password.dbPass,
+	'user':password.dbPUsr,
+	'password':password.dbPPass,
 	'db':'youdu',
 	'charset':'utf8',
 	'cursorclass':pymysql.cursors.DictCursor,
@@ -24,7 +25,14 @@ sql='SELECT rating_numRaters FROM c17_douban_data WHERE id=1;'
 c.execute(sql)
 idR=c.fetchall()
 print(idR[0]["rating_numRaters"])
-print("Hi")
+
+# try to get new records
+sql='SELECT douban_book_id FROM books WHERE id>%s'
+v=(idR[0]["rating_numRaters"])
+c.execute(sql,v)
+idR=c.fetchall()
+print(len(idR))
+
 
 
 #sql = 'SELECT douban_book_id FROM books WHERE id>'
